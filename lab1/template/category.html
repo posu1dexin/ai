@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category Results</title>
+</head>
+<body>
+
+<h1>Category Results</h1>
+
+<h2>Articles:</h2>
+<ul>
+    {% for result in category_results %}
+        <li><a href="{{ result['url'] }}">{{ result['text'][:1000] }}...</a></li> <!-- Display first 100 characters of the text -->
+    {% endfor %}
+</ul>
+
+</body>
+</html>

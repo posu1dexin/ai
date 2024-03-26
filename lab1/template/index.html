@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <form method="post">
+        <input type="text" name="query" placeholder="Search..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Categories</h2>
+    <ul>
+        {% for category in categories %}
+        <li><a href="/category/{{ category }}">{{ category }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h2>Top 5 results</h2>
+    {% if results|length > 0 %}
+    <ul>
+        {% for result in results.values %}
+        <li><a href="{{ result[2] }}">{{ result[0][:1000] }}...</a></li> <!-- Display first 100 characters of the text -->
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+</body>
+</html>
