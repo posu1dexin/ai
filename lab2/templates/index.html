@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection Prediction</title>
+</head>
+<body>
+    <div>
+        <h1>Object Detection Prediction</h1>
+        <form action="/predict" method="post" id="prediction-form">
+            <label for="token">API Token:</label>
+            <input type="text" id="token" name="token" required>
+            <input type="hidden" id="project_id" name="project_id" value="61341">
+            <input type="hidden" id="model" name="model" value="cards">
+            <label for="image_url">Image URL:</label>
+            <input type="text" id="image_url" name="image_url" required>
+            <button type="submit">Predict</button>
+        </form>
+        <div id="response"></div>
+    </div>
+</body>
+</html>

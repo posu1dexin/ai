@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection Results</title>
+    <style>
+        /* CSS styles for result page */
+        #image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .bounding-box {
+            position: absolute;
+            border: 2px solid #FF0000; /* Default Red border */
+            font-size: 16px;
+            pointer-events: none; /* Prevent bounding box from being clickable */
+        }
+
+        /* Different colors for bounding boxes and text based on result */
+        {% for result in results %}
+            {% if result.label == 'hearts' %}
+                .{{ result.label }} {
+                    border-color: #00FF00; /* Green border for 'person' */
+                    color: #00FF00; /* Green text for 'person' */
+                }
+            {% elif result.label == 'clubs' %}
+                .{{ result.label }} {
+                    border-color: #0000FF; /* Blue border for 'car' */
+                    color: #0000FF; /* Blue text for 'car' */
+                }
+            {% elif result.label == 'diamonds' %}
+            .{{ result.label }} {
+                border-color: #6A0DAD; /* Blue border for 'car' */
+                color: #6A0DAD; /* Blue text for 'car' */
+            }
+            {% else %}
+                .{{ result.label }} {
+                    border-color: #FFA500; /* Orange border for other labels */
+                    color: #FFA500; /* Orange text for other labels */
+                }
+            {% endif %}
+        {% endfor %}
+    </style>
+</head>
+<body>
+    <h1>Object Detection Results</h1>
+    <div id="image-container">
+        <img src="{{ image_url }}" alt="Object Detection Image" id="detection-image">
+        {% for result in results %}
+        <div class="bounding-box {{ result.label }}" style="left: {{ result.x0 }}px; top: {{ result.y0 }}px; width: {{ result.x1 - result.x0 }}px; height: {{ result.y1 - result.y0 }}px;">
+            {{ result.label }} ({{ '%.1f' | format(result.score) }})
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // JavaScript code to display results
+        document.addEventListener('DOMContentLoaded', function () {
+            var detectionImage = document.getElementById('detection-image');
+            var imageContainer = document.getElementById('image-container');
+            var results = {{ results | tojson | safe }};
+
+            // Adjust image container size to match the image
+            imageContainer.style.width = detectionImage.width + 'px';
+            imageContainer.style.height = detectionImage.height + 'px';
+
+            // Loop through results and draw bounding boxes
+            results.forEach(function (result) {
+                var boundingBox = document.createElement('div');
+                boundingBox.className = 'bounding-box ' + result.label;
+                boundingBox.style.left = result.x0 + 'px';
+                boundingBox.style.top = result.y0 + 'px';
+                boundingBox.style.width = (result.x1 - result.x0) + 'px';
+                boundingBox.style.height = (result.y1 - result.y0) + 'px';
+                boundingBox.textContent = result.label + ' (' + '%.1f'.format(result.score) + ')';
+                imageContainer.appendChild(boundingBox);
+            });
+        });
+    </script>
+</body>
+</html>
